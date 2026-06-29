@@ -32,7 +32,7 @@ export type Campaign = {
 };
 
 export const storeInfo = {
-  name: "Pozitif Petshop Alanya",
+  name: "Pozitif Petshop ",
   shortName: "Pozitif Petshop",
   tagline: "Alanya'da evcil dostlar için premium mama, aksesuar ve bakım deneyimi.",
   phone: "+90 555 222 00 82",
@@ -47,7 +47,7 @@ export const storeInfo = {
 export const navigation = [
   { label: "Ana Sayfa", href: "/" },
   { label: "Ürünler", href: "/urunler" },
-  { label: "Kategoriler", href: "/kategori/kopek" },
+  { label: "Kategoriler", href: "/#kategoriler" },,
   { label: "Markalar", href: "/markalar" },
   { label: "Kampanyalar", href: "/kampanyalar" },
   { label: "Hakkımızda", href: "/hakkimizda" },
@@ -61,7 +61,7 @@ export const categories: Category[] = [
     description: "Irka, yaşa ve hassasiyetlere göre mama, ödül ve bakım.",
     icon: "dog",
     accent: "#1f7a3d",
-    image: "/images/category-flatlay.png",
+    image: "/images/golden.jpg",
     objectPosition: "18% 8%",
     count: 126
   },
@@ -70,8 +70,8 @@ export const categories: Category[] = [
     slug: "kedi",
     description: "Sterilised, yavru, hassas sindirim ve tüy topağı çözümleri.",
     icon: "cat",
-    accent: "#f26a4f",
-    image: "/images/category-flatlay.png",
+    accent: "#635e5d4b",
+    image: "/images/sevimli-komik-kedi-yavrusu_23-2151923237.avif",
     objectPosition: "78% 14%",
     count: 142
   },
@@ -80,20 +80,20 @@ export const categories: Category[] = [
     slug: "kus",
     description: "Yem, vitamin, kraker, oyuncak ve kafes ekipmanları.",
     icon: "bird",
-    accent: "#ffc107",
-    image: "/images/category-flatlay.png",
-    objectPosition: "10% 68%",
+    accent: "#ffc507",
+    image: "/images/pngtree-adorable-little-yellow-budgie-in-the-wild-image_15687870.jpg",
+    objectPosition: "50% 33%",
     count: 54
   },
   {
-    name: "Akvaryum",
+    name: "Balık",
     slug: "akvaryum",
     description: "Balık yemi, dekor, filtre, bakım ve akvaryum aksesuarları.",
     icon: "fish",
     accent: "#1aa6a6",
-    image: "/images/category-flatlay.png",
+    image: "/images/shutterstock_440173831.jpg",
     objectPosition: "23% 88%",
-    count: 61
+    count: 1
   },
   {
     name: "Kemirgen",
@@ -101,18 +101,18 @@ export const categories: Category[] = [
     description: "Hamster, tavşan ve guinea pig için doğal ürünler.",
     icon: "rabbit",
     accent: "#8d6e63",
-    image: "/images/category-flatlay.png",
+    image: "/images/guinea-pig-appreciation-day.jpg",
     objectPosition: "78% 88%",
-    count: 38
+    count: 3
   },
   {
-    name: "Bakım",
-    slug: "bakim",
+    name: "Fırsat Ürünleri",
+    slug: "kampanyalar",
     description: "Tüy, pati, deri, ağız ve hijyen bakımı için seçili ürünler.",
     icon: "sparkles",
     accent: "#6c63ff",
-    image: "/images/category-flatlay.png",
-    objectPosition: "60% 62%",
+    image: "/images/ChatGPT Image 29 Haz 2026 18_17_35.png",
+    objectPosition: "80% 10%",
     count: 49
   }
 ];
@@ -120,7 +120,7 @@ export const categories: Category[] = [
 export const brands = [
   "Royal Canin",
   "Pro Plan",
-  "Acana",
+  "Felicia",
   "Brit Care",
   "Hill's",
   "Reflex",

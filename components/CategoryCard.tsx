@@ -16,7 +16,11 @@ export function CategoryCard({ category }: { category: Category }) {
 
   return (
     <Link
-      href={`/kategori/${category.slug}`}
+     href={
+  category.slug === "kampanyalar"
+    ? "/kampanyalar"
+    : `/kategori/${category.slug}`
+}
       className="group grid overflow-hidden rounded-[8px] border hairline bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lift"
     >
       <div className="image-sheen aspect-[5/3]">

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CheckCircle2 } from "lucide-react";
+import Link from "next/link";
 import { BrandMarquee } from "@/components/BrandMarquee";
 import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";
@@ -33,13 +34,16 @@ export default function BrandsPage() {
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {brands.map((brand, index) => (
               <Reveal key={brand} delay={index * 0.03}>
-                <article className="rounded-[8px] border hairline bg-white p-5 shadow-sm">
-                  <CheckCircle2 size={22} className="text-leaf-600" aria-hidden="true" />
-                  <h2 className="mt-4 text-xl font-black text-ink">{brand}</h2>
-                  <p className="mt-2 text-sm leading-7 text-neutral-600">
-                    Seçili ürünler, kampanya dönemleri ve alternatif öneriler.
-                  </p>
-                </article>
+                <Link
+  href={`/markalar/${brand.toLowerCase().replace(/\s+/g, "-")}`}
+  className="block rounded-[8px] border hairline bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+>
+  <CheckCircle2 size={22} className="text-leaf-600" aria-hidden="true" />
+  <h2 className="mt-4 text-xl font-black text-ink">{brand}</h2>
+  <p className="mt-2 text-sm leading-7 text-neutral-600">
+    Seçili ürünler, kampanya dönemleri ve alternatif öneriler.
+  </p>
+</Link>
               </Reveal>
             ))}
           </div>

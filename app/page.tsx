@@ -15,7 +15,10 @@ export default function HomePage() {
     <>
       <Hero />
       <main className="pt-28">
-        <section className="py-16">
+        <section
+        id="kategoriler"
+        className="scroll-mt-16 py-16"
+>
           <div className="container-shell">
             <Reveal className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
               <SectionHeader
