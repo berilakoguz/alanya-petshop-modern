@@ -303,10 +303,10 @@ export const products: Product[] = [
     objectPosition: "64% 60%"
   }
   ,{
-    id: "Gourment-Gold",
+    id: "Gourmet-Gold",
     name: "Gourmet Gold Çifte Lezzet Ciğerli&Tavşanlı Yaş Kedi Maması 85 g",
     category: "kedi",
-    brand: "Gourment Gold",
+    brand: "Gourmet Gold",
     description: "Gourmet Gold Çifte Lezzet Ciğerli & Tavşanlı 85 gr, ciğer ve tavşan etinin lezzetini bir araya getiren, yetişkin kediler için tam ve dengeli yaş mamadır. Günlük beslenmeyi destekler.",
     price: 50,
     rating: 4.9,
@@ -315,10 +315,10 @@ export const products: Product[] = [
     objectPosition: "64% 60%"
   },
   ,{
-    id: "Gourment-Gold-Kiyilmis-Tavuklu",
+    id: "Gourmet-Gold-Kiyilmis-Tavuklu",
     name: "Gourmet Gold Kıyılmış Tavuklu Yaş Kedi Maması, Yetişkin, 85 g",
     category: "kedi",
-    brand: "Gourment Gold",
+    brand: "Gourmet Gold",
     description: "Gourmet Gold Kıyılmış Tavuklu Yaş Kedi Maması, Yetişkin, 85 g, özenle hazırlanan tavuk etiyle yetişkin kediler için tam ve dengeli yaş mamadır. Lezzetli formülüyle günlük beslenmeyi destekler.",
     price: 50,
     rating: 4.9,
@@ -327,15 +327,64 @@ export const products: Product[] = [
     objectPosition: "64% 60%"
   },
   {
-    id: "Gourment-Gold-Parca-Etli-ve-Soslu-Alabalik-ve-Sebzeli",
+    id: "Gourmet-Gold-Parca-Etli-ve-Soslu-Alabalik-ve-Sebzeli",
     name: "Gourmet Gold Parça Etli ve Soslu Alabalık ve Sebzeli 85 gr",
     category: "kedi",
-    brand: "Gourment Gold",
+    brand: "Gourmet Gold",
     description: "Gourmet Gold Parça Etli ve Soslu Alabalık ve Sebzeli 85 gr, özenle hazırlanan alabalık ve sebzelerle yetişkin kediler için tam ve dengeli yaş mamadır. Lezzetli formülüyle günlük beslenmeyi destekler.",
     price: 50,
     rating: 4.9,
     stock: "Stokta",
     image: "/images/Gourmet Gold Parça Etli ve Soslu Alabalık ve Sebzeli 85 gr.webp",
+    objectPosition: "64% 60%"
+  },
+
+  {
+    id: "Gourmet-Gold-Kiyilmis-Hindili",
+    name: "Gourmet Gold Kıyılmış Hindili 85 Gr",
+    category: "kedi",
+    brand: "Gourmet Gold",
+    description: "Gourmet Gold Kıyılmış Hindili 85 Gr, özenle seçilmiş hindili etiyle yetişkin kediler için tam ve dengeli yaş mamadır. Lezzetli formülüyle günlük beslenmeyi destekler.",
+    price: 50,
+    rating: 4.9,
+    stock: "Stokta",
+    image: "/images/Gurme Gold Kıyılmış Hindili 85 Gr.jpg",
+    objectPosition: "64% 60%"
+  },
+   {
+    id: "HILL’S-SCIENCE-PLAN-Sensitive-Stomach-&-Skin-Adult-Cat-Food-with-Chicken",
+    name: "HILL’S SCIENCE PLAN Sensitive Stomach & Skin Adult Cat Food with Chicken",
+    category: "kedi",
+    brand: "HILL’S SCIENCE PLAN",
+    description: "HILL’S SCIENCE PLAN Sensitive Stomach & Skin Adult Cat Food with Chicken, özenle hazırlanan tavuk etiyle yetişkin kediler için tam ve dengeli yaş mamadır. Lezzetli formülüyle günlük beslenmeyi destekler.",
+    price: 1800,
+    rating: 4.9,
+    stock: "Stokta",
+    image: "/images/HILL’S SCIENCE PLAN Sensitive Stomach & Skin Adult Cat Food with Chicken.jpg",
+    objectPosition: "64% 60%"
+  },
+   {
+    id: "HILL’S-Sterilised-Tavuklu-Kisirlastirilmis-Yetiskin-Kedi-Mamasi-1.5-KG",
+    name: "Hill’s Sterilised Tavuklu Kısırlaştırılmış Yetişkin Kedi Maması 1.5 KG",
+    category: "kedi",
+    brand: "HILL’S SCIENCE PLAN",
+    description: "Hill’s Sterilised Tavuklu Kısırlaştırılmış Yetişkin Kedi Maması 1.5 KG, özenle hazırlanan tavuk etiyle yetişkin kediler için tam ve dengeli yaş mamadır. Lezzetli formülüyle günlük beslenmeyi destekler.",
+    price: 1700,
+    rating: 4.9,
+    stock: "Stokta",
+    image: "/images/Hill’s Sterilised Tavuklu Kısırlaştırılmış Yetişkin Kedi Maması 1.5 KG.jpg",
+    objectPosition: "64% 60%"
+  },
+  {
+    id: "HILL’S-Sterilised-Tavuklu-Kisirlastirilmis-Yetiskin-Kedi-Mamasi-1.5-KG",
+    name: "Hill’s Sterilised Tavuklu Kısırlaştırılmış Yetişkin Kedi Maması 1.5 KG",
+    category: "kedi",
+    brand: "HILL’S SCIENCE PLAN",
+    description: "Hill’s Sterilised Tavuklu Kısırlaştırılmış Yetişkin Kedi Maması 1.5 KG, özenle hazırlanan tavuk etiyle yetişkin kediler için tam ve dengeli yaş mamadır. Lezzetli formülüyle günlük beslenmeyi destekler.",
+    price: 1700,
+    rating: 4.9,
+    stock: "Stokta",
+    image: "/images/Hill’s Sterilised Tavuklu Kısırlaştırılmış Yetişkin Kedi Maması 1.5 KG.jpg",
     objectPosition: "64% 60%"
   },
 ];
