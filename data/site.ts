@@ -237,6 +237,107 @@ export const products: Product[] = [
     image: "/images/product-assortment.png",
     objectPosition: "64% 60%"
   }
+  ,
+  {
+    id: "bonnie-chicken",
+    name: "BONNİE Tavuk Etli Yetişkin Kedi Maması ",
+    category: "kedi",
+    brand: "BONNİE",
+    description: "10 kg",
+    price: 900,
+    rating: 4.8,
+    stock: "Stokta",
+    image: "/images/KEDİ-BONNİE-Tavuk-Etli-Yetişkin-Kedi-Maması .webp",
+    objectPosition: "64% 60%"
+  }
+  ,
+  {
+    id: "felicia-salmon",
+    name: "Felicia Tahılsız Sterilised Somonlu Yaş Kedi Maması ",
+    category: "kedi",
+    brand: " Felicia",
+    description: "Felicia Tahılsız 85 gr Sterilised Somonlu Yaş Kedi Maması, kısırlaştırılmış yetişkin kediler için özel olarak geliştirilmiş, somonlu ve tahılsız tam yaş mamadır. Lezzetli içeriğiyle günlük beslenmeyi destekler ve hassas sindirime uygundur.",
+    price: 45,
+    rating: 4.8,
+    stock: "Stokta",
+    image: "/images/Felicia-Tahılsız-Sterilised-Somonlu-Yaş-Kedi-Maması.jpg",
+    objectPosition: "64% 60%"
+  }
+  ,
+  {
+    id: " felicia-chicken",
+    name: "Felicia Tahılsız 85 gr Sterilised Tavuklu Yaş Kedi Maması",
+    category: "kedi",
+    brand: " Felicia",
+    description: "Felicia Tahılsız 85 gr Sterilised Tavuklu Yaş Kedi Maması, kısırlaştırılmış yetişkin kediler için özel olarak geliştirilmiş tam ve dengeli bir yaş mamadır. Tahılsız formülü ve lezzetli tavuk içeriğiyle günlük beslenmeyi destekler.",
+    price: 45,
+    rating: 4.8,
+    stock: "Stokta",
+    image: "/images/Felicia Tahılsız 85 gr Sterilised Tavuklu Yaş Kedi Maması.jpg",
+    objectPosition: "64% 60%"
+  }
+  ,
+  {
+    id: "gourmet-gold-cifte-lezzet",
+    name: "Gourmet Gold Çifte Lezzet Hindili ve Ördekli 85 gr Yaş Kedi Maması",
+    category: "kedi",
+    brand: "Gourmet Gold",
+    description: "Gourmet Gold Çifte Lezzet Hindili ve Ördekli 85 gr, özenle hazırlanan hindi ve ördek etiyle yetişkin kediler için tam ve dengeli yaş mamadır. Lezzetli formülüyle günlük beslenmeyi destekler.",
+    price: 50,
+    rating: 4.8,
+    stock: "Stokta",
+    image: "/images/Gourmet Gold Çifte Lezzet Hindili ve Ördekli 85 gr.jpeg",
+    objectPosition: "64% 60%"
+  }
+   ,
+  {
+    id: "gourmet-gold-kiyilmis-sigir-etli",
+    name: "Gourmet Gold Kıyılmış Sığır Etli Kedi Konservesi 85 gr",
+    category: "kedi",
+    brand: "Gourmet Gold",
+    description: "Gourmet Gold Kıyılmış Sığır Etli Kedi Konservesi 85 gr, özenle seçilmiş sığır etiyle yetişkin kediler için tam ve dengeli yaş mamadır. Lezzetli formülüyle günlük beslenmeyi destekler.",
+    price: 50,
+    rating: 4.8,
+    stock: "Stokta",
+    image: "/images/Gourmet Gold Kıyılmış Sığır Etli Kedi Konservesi 85 gr.jpg",
+    objectPosition: "64% 60%"
+  }
+  ,{
+    id: "Gourment-Gold",
+    name: "Gourmet Gold Çifte Lezzet Ciğerli&Tavşanlı Yaş Kedi Maması 85 g",
+    category: "kedi",
+    brand: "Gourment Gold",
+    description: "Gourmet Gold Çifte Lezzet Ciğerli & Tavşanlı 85 gr, ciğer ve tavşan etinin lezzetini bir araya getiren, yetişkin kediler için tam ve dengeli yaş mamadır. Günlük beslenmeyi destekler.",
+    price: 50,
+    rating: 4.9,
+    stock: "Stokta",
+    image: "/images/pro-plan-gourmet-gold-hindili-ordekli-konserve-kedi-mamasi-85-g-11037-510x510.jpg",
+    objectPosition: "64% 60%"
+  },
+  ,{
+    id: "Gourment-Gold-Kiyilmis-Tavuklu",
+    name: "Gourmet Gold Kıyılmış Tavuklu Yaş Kedi Maması, Yetişkin, 85 g",
+    category: "kedi",
+    brand: "Gourment Gold",
+    description: "Gourmet Gold Kıyılmış Tavuklu Yaş Kedi Maması, Yetişkin, 85 g, özenle hazırlanan tavuk etiyle yetişkin kediler için tam ve dengeli yaş mamadır. Lezzetli formülüyle günlük beslenmeyi destekler.",
+    price: 50,
+    rating: 4.9,
+    stock: "Stokta",
+    image: "/images/Gourmet Gold Kıyılmış Tavuklu Yaş Kedi Maması, Yetişkin, 85 g.jpg",
+    objectPosition: "64% 60%"
+  },
+  {
+    id: "Gourment-Gold-Parca-Etli-ve-Soslu-Alabalik-ve-Sebzeli",
+    name: "Gourmet Gold Parça Etli ve Soslu Alabalık ve Sebzeli 85 gr",
+    category: "kedi",
+    brand: "Gourment Gold",
+    description: "Gourmet Gold Parça Etli ve Soslu Alabalık ve Sebzeli 85 gr, özenle hazırlanan alabalık ve sebzelerle yetişkin kediler için tam ve dengeli yaş mamadır. Lezzetli formülüyle günlük beslenmeyi destekler.",
+    price: 50,
+    rating: 4.9,
+    stock: "Stokta",
+    image: "/images/Gourmet Gold Parça Etli ve Soslu Alabalık ve Sebzeli 85 gr.webp",
+    objectPosition: "64% 60%"
+  },
 ];
 
 export const campaigns: Campaign[] = [
