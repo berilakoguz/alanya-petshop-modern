@@ -4,7 +4,7 @@ import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";
 import { SectionHeader } from "@/components/SectionHeader";
 import { blogPosts } from "@/data/site";
-
+import Link from "next/link";
 export const metadata: Metadata = {
   title: "Blog",
   description: "Pozitif Petshop Alanya bakım ve ürün seçimi rehberleri."
@@ -46,6 +46,12 @@ export default function BlogPage() {
                     Bu içerik alanı örnek yapı olarak hazırlandı. Gerçek blog metinlerini aynı kart yapısı içinde
                     genişletebilirsiniz.
                   </div>
+                  <Link
+                    href={post.href}
+                    className="mt-6 inline-flex items-center font-bold text-green-700 hover:underline"
+                  >
+                 Devamını Oku →
+                  </Link>
                 </article>
               </Reveal>
             ))}
