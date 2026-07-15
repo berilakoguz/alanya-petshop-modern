@@ -63,7 +63,7 @@ export default function ContactPage() {
               <div className="overflow-hidden rounded-[8px] border hairline bg-white shadow-soft">
                 <iframe
                   title="Pozitif Petshop Alanya harita"
-                  src="https://maps.google.com/maps?q=Alanya%20Pet%20Shop&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                  src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d6410.633903887283!2d32.005344!3d36.54647!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14dc987bc288f091%3A0xc18f1911605923a3!2sPozitif%20PetShop!5e0!3m2!1str!2str!4v1784108682537!5m2!1str!2str"
                   className="h-[420px] w-full border-0"
                   loading="lazy"
                 />
@@ -73,8 +73,8 @@ export default function ContactPage() {
                 <div>
                   <h2 className="text-lg font-black">{storeInfo.address}</h2>
                   <p className="mt-2 text-sm leading-7 text-white/68">
-                    Harita konumu örnek Alanya aramasıyla bağlandı. Net mağaza koordinatı geldiğinde iframe URL'si
-                    değiştirilebilir.
+                   
+                    
                   </p>
                 </div>
               </div>

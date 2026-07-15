@@ -26,9 +26,29 @@ export type Product = {
 
 export type Campaign = {
   title: string;
+  slug: string;
   description: string;
   eyebrow: string;
   tone: "leaf" | "aqua" | "coral";
+  discountLabel: string;
+  discount:
+    | { type: "percentage"; value: number }
+    | { type: "buyXPayY"; buy: number; pay: number };
+  categorySlugs: string[];
+  productIds?: string[];
+  validUntil: string;
+};
+
+export type BlogPost = {
+  title: string;
+  slug: string;
+  date: string;
+  readTime: string;
+  excerpt: string;
+  href: string;
+  image: string;
+  content: string[];
+  tips: string[];
 };
 
 export const storeInfo = {
@@ -37,17 +57,17 @@ export const storeInfo = {
   tagline: "Alanya'da evcil dostlar için premium mama, aksesuar ve bakım deneyimi.",
   phone: "+90 555 222 00 82",
   whatsapp: "905552220082",
-  email: "info@alanyapetshops.com",
-  address: "Saray Mahallesi, Alanya / Antalya",
-  hours: "Haftanın 7 günü 09:00 - 22:00",
-  freeDelivery: "Alanya içi 500 TL üzeri ücretsiz servis",
+  email: "alanyapetshop@gmail.com" ,
+  address: "Pozitif PetShop 81400, Güller Pınarı, Hacet Cd. 34/A, 07460 Alanya/Antalya",
+  hours: "Haftanın 7 günü 09:30 - 21:00",
+  freeDelivery: "Alanya içi 1000 TL ve üzeri ücretsiz servis",
   mapsUrl: "https://maps.google.com/?q=Alanya%20Pet%20Shop"
 };
 
 export const navigation = [
   { label: "Ana Sayfa", href: "/" },
   { label: "Ürünler", href: "/urunler" },
-  { label: "Kategoriler", href: "/#kategoriler" },,
+  { label: "Kategoriler", href: "/#kategoriler" },
   { label: "Markalar", href: "/markalar" },
   { label: "Kampanyalar", href: "/kampanyalar" },
   { label: "Hakkımızda", href: "/hakkimizda" },
@@ -146,7 +166,7 @@ export const brands = [
   "Vitakraft"
 ];
 
-export const products: Product[] = [
+const productList: Array<Product | undefined> = [
   {
     id: "royal-canin-mini-adult",
     name: "Royal Canin Mini Adult Köpek Maması",
@@ -1038,63 +1058,133 @@ export const products: Product[] = [
   },
 ];
 
+export const products: Product[] = productList.filter((product): product is Product => Boolean(product));
+
 export const campaigns: Campaign[] = [
   {
     title: "Kedi ve köpek mamalarında hafta sonu fırsatı",
+    slug: "hafta-sonu-mama-firsati",
     description: "Seçili premium mamalarda sepette ekstra indirim ve aynı gün servis.",
     eyebrow: "Hafta Sonu",
-    tone: "leaf"
+    tone: "leaf",
+    discountLabel: "Sepette %10 avantaj",
+    discount: { type: "percentage", value: 10 },
+    categorySlugs: ["kedi", "kopek"],
+    productIds: [
+      "royal-canin-mini-adult",
+      "pro-plan-sterilised-salmon",
+      "reflex-plus-lamb",
+      "bonnie-chicken"
+    ],
+    validUntil: "Pazar 22:00"
   },
   {
     title: "Akvaryum başlangıç setlerinde danışmanlık bizden",
+    slug: "akvaryum-baslangic-firsati",
     description: "Filtre, yem, dekor ve bakım ürünlerini tek seferde doğru kurun.",
     eyebrow: "Akvaryum",
-    tone: "aqua"
+    tone: "aqua",
+    discountLabel: "Set alışverişinde destek",
+    discount: { type: "percentage", value: 8 },
+    categorySlugs: ["akvaryum"],
+    productIds: ["tetramin-flakes"],
+    validUntil: "Stoklarla sınırlı"
   },
   {
     title: "Oyuncak ve ödül ürünlerinde 3 al 2 öde",
+    slug: "oyuncak-odul-3-al-2-ode",
     description: "Enerji atan dostlar için seçili oyuncak ve ödül ürünleri.",
     eyebrow: "Oyun",
-    tone: "coral"
+    tone: "coral",
+    discountLabel: "3 al 2 öde",
+    discount: { type: "buyXPayY", buy: 3, pay: 2 },
+    categorySlugs: ["kus", "kemirgen", "bakim"],
+    productIds: ["vitakraft-kracker", "eastland-harness", "beaphar-malt-paste"],
+    validUntil: "Ay sonuna kadar"
   }
 ];
 
 export const testimonials = [
   {
-    name: "Derya K.",
-    text: "Mama seçimi konusunda çok iyi yönlendirdiler. Sipariş aynı gün evime geldi.",
-    pet: "British Shorthair sahibi"
+    name: "Beril A.",
+    text: "Hayvanlara olan sevgileri ve ilgileri sadece petshop içinde sınırlı değil, dışarıda aç ve susuz dolaşan birçok kedi ve köpeğe de yardım eli uzatıyorlar.Çok takdir edilesi bir davranış gerçekten👏🏻👏🏻💛 Sizi seviyoruz Pozitif petshop ailesi😻",
+    
   },
   {
-    name: "Mert A.",
-    text: "Akvaryum kurulumunda ihtiyacım olan her şeyi tek tek anlattılar. Çok güvenilir.",
-    pet: "Akvaryum hobisi"
+    name: "İsmail Caner N.",
+    text: "işletme sahibi alanında uzman. sorduğunuz sorulara verdiği cevaplardan bunu anlayabiliyorsunuz. sattığı ürünler reklam içerikli değil can dostlarımızın sağlığını destekleyen tarzda. kararsız kaldığınız durumlarda faydalı seçeneği kendisi sunuyor ve açıklıyor. yanlış hatırlamıyorsam işletme sahibi ercan bey ve biyoloji konusunda bir geçmişi var. tavsiye ederim.",
+   
   },
   {
-    name: "Selin T.",
-    text: "Köpeğimin hassas midesi için doğru mamayı burada bulduk. İlgi çok iyi.",
-    pet: "Golden Retriever sahibi"
+    name: "Sinan C.",
+    text: "Kedim İçin Aradığım Ne Varsa Fiyat Performans Şeklinde Zorlanmadan Buldum. Ercan Bey Yavru kedime mama yönlendirmesi yaptı , mama yemeyen kedi mama yemeye başladı teşekkürler :)",
+   
   }
 ];
 
-export const blogPosts = [
+export const blogPosts: BlogPost[] = [
   {
     title: "Kedilerde mama değişimi nasıl yapılmalı?",
+    slug: "kedilerde-mama-degisimi",
     date: "12 Haziran 2026",
+    readTime: "5 dk",
     excerpt: "Ani geçişler yerine 7 günlük kontrollü planla sindirimi koruyun.",
-    href: "/blog"
+    href: "/blog/kedilerde-mama-degisimi",
+    image: "/images/sevimli-komik-kedi-yavrusu_23-2151923237.avif",
+    content: [
+      "Kedilerde mama değişimi hızlı yapılırsa sindirim sistemi zorlanabilir. Kusma, ishal, iştahsızlık veya gaz gibi sorunların en sık nedenlerinden biri yeni mamaya bir anda geçmektir.",
+      "En sağlıklı yöntem, eski mama ile yeni mamayı 7 gün boyunca kademeli karıştırmaktır. İlk iki gün eski mamanın oranı yüksek tutulur, sonraki günlerde yeni mama yavaş yavaş artırılır.",
+      "Kediniz hassas sindirimli, yaşlı, yavru veya kısırlaştırılmışsa geçiş süresini 10 güne kadar uzatabilirsiniz. Bu süreçte dışkı yapısını ve iştahı takip etmek önemlidir.",
+      "Mama değişimi sırasında yeni ödül maması, yaş mama veya farklı takviye ürünleri eklememek daha doğru olur. Böylece olası bir reaksiyon olursa hangi üründen kaynaklandığını anlamak kolaylaşır."
+    ],
+    tips: [
+      "1-2. gün: %75 eski mama, %25 yeni mama",
+      "3-4. gün: %50 eski mama, %50 yeni mama",
+      "5-6. gün: %25 eski mama, %75 yeni mama",
+      "7. gün: tamamen yeni mama"
+    ]
   },
   {
     title: "Yaz aylarında köpek patisi bakımı",
+    slug: "yaz-aylarinda-kopek-patisi-bakimi",
     date: "04 Haziran 2026",
+    readTime: "4 dk",
     excerpt: "Alanya sıcaklarında yürüyüş saatleri ve pati kremi seçimi önem kazanır.",
-    href: "/blog"
+    href: "/blog/yaz-aylarinda-kopek-patisi-bakimi",
+    image: "/images/golden.jpg",
+    content: [
+      "Yaz aylarında asfalt, taş zemin ve kaldırım yüzeyleri hava sıcaklığından çok daha fazla ısınabilir. Bu yüzeyler köpeklerin pati yastıklarında yanık, kuruluk ve çatlak oluşturabilir.",
+      "Yürüyüşleri sabah erken saatlere veya akşam serinliğine almak pati sağlığını korumanın en pratik yoludur. Öğle saatlerinde kısa tuvalet molaları dışında uzun yürüyüşten kaçınmak gerekir.",
+      "Yürüyüşten sonra patileri kontrol etmek, aralara kaçan taş veya dikenleri temizlemek ve gerekirse pati balmı kullanmak koruyucu bakım sağlar.",
+      "Köpeğiniz yürürken aniden duruyor, patisini yalıyor veya topallıyorsa sıcak zemin ya da küçük bir kesik ihtimalini kontrol edin."
+    ],
+    tips: [
+      "Elinizin tersini zeminde 5 saniye tutamıyorsanız yürüyüş için zemin çok sıcaktır.",
+      "Yürüyüş sonrası patileri ılık suyla temizleyip kurulayın.",
+      "Çatlak pati görünümünde nemlendirici pati balmı kullanın.",
+      "Sıcak havada su molalarını artırın."
+    ]
   },
   {
     title: "Yeni akvaryumda ilk 14 gün",
+    slug: "yeni-akvaryumda-ilk-14-gun",
     date: "24 Mayıs 2026",
+    readTime: "6 dk",
     excerpt: "Su dengesi, yemleme ve filtre düzeni için pratik başlangıç rehberi.",
-    href: "/blog"
+    href: "/blog/yeni-akvaryumda-ilk-14-gun",
+    image: "/images/shutterstock_440173831.jpg",
+    content: [
+      "Yeni kurulan akvaryumlarda ilk 14 gün su dengesinin oturması için kritik dönemdir. Filtre, bakteri döngüsü ve yemleme düzeni doğru kurulmazsa balıklar strese girebilir.",
+      "Akvaryumu kurduktan sonra filtreyi sürekli çalışır durumda bırakmak gerekir. Filtrenin sık sık kapatılması yararlı bakterilerin çoğalmasını zorlaştırır.",
+      "İlk günlerde fazla yem vermek suyu hızlı bozar. Balıkların birkaç dakika içinde tüketebileceği kadar az yem kullanmak daha güvenlidir.",
+      "Balık eklemesini aceleye getirmemek, su hazırlayıcı ve bakteri kültürü gibi destek ürünlerini doğru dozda kullanmak başlangıcı çok daha sağlıklı yapar."
+    ],
+    tips: [
+      "Filtreyi 24 saat sürekli çalıştırın.",
+      "İlk hafta az yem verin, dipte yem bırakmayın.",
+      "Ani ve büyük su değişimlerinden kaçının.",
+      "Yeni balıkları akvaryum suyuna yavaş alıştırın."
+    ]
   }
 ];
 

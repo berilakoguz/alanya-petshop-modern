@@ -1,9 +1,9 @@
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react";
+import { BadgePercent, Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react";
 import type { Product } from "@/data/site";
-import { storeInfo } from "@/data/site";
+import { campaigns, storeInfo } from "@/data/site";
 import { formatPrice } from "@/lib/utils";
 
 type CartItem = {
@@ -11,10 +11,20 @@ type CartItem = {
   quantity: number;
 };
 
+type AppliedDiscount = {
+  slug: string;
+  title: string;
+  label: string;
+  amount: number;
+};
+
 type CartContextValue = {
   items: CartItem[];
   totalItems: number;
+  subtotalPrice: number;
+  discountTotal: number;
   totalPrice: number;
+  appliedDiscounts: AppliedDiscount[];
   isOpen: boolean;
   addItem: (product: Product) => void;
   decreaseItem: (productId: string) => void;
@@ -53,12 +63,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<CartContextValue>(() => {
     const totalItems = items.reduce((total, item) => total + item.quantity, 0);
-    const totalPrice = items.reduce((total, item) => total + item.product.price * item.quantity, 0);
+    const subtotalPrice = items.reduce((total, item) => total + item.product.price * item.quantity, 0);
+    const appliedDiscounts = calculateCampaignDiscounts(items);
+    const discountTotal = appliedDiscounts.reduce((total, discount) => total + discount.amount, 0);
+    const totalPrice = Math.max(0, subtotalPrice - discountTotal);
 
     return {
       items,
       totalItems,
+      subtotalPrice,
+      discountTotal,
       totalPrice,
+      appliedDiscounts,
       isOpen,
       addItem: (product) => {
         setItems((currentItems) => {
@@ -109,10 +125,29 @@ export function useCart() {
 }
 
 function CartDrawer() {
-  const { items, totalItems, totalPrice, isOpen, closeCart, decreaseItem, addItem, removeItem, clearCart } = useCart();
+  const {
+    items,
+    totalItems,
+    subtotalPrice,
+    discountTotal,
+    totalPrice,
+    appliedDiscounts,
+    isOpen,
+    closeCart,
+    decreaseItem,
+    addItem,
+    removeItem,
+    clearCart
+  } = useCart();
   const whatsappText = `Merhaba, sepetimdeki ürünler için bilgi almak istiyorum:\n${items
     .map((item) => `- ${item.product.name} x ${item.quantity}`)
-    .join("\n")}\nToplam: ${formatPrice(totalPrice)}`;
+    .join("\n")}\n${
+    appliedDiscounts.length > 0
+      ? `Uygulanan kampanyalar:\n${appliedDiscounts
+          .map((discount) => `- ${discount.title}: -${formatPrice(discount.amount)}`)
+          .join("\n")}\n`
+      : ""
+  }Toplam: ${formatPrice(totalPrice)}`;
 
   return (
     <>
@@ -158,63 +193,117 @@ function CartDrawer() {
             </div>
           ) : (
             <div className="grid gap-4">
-              {items.map((item) => (
-                <article key={item.product.id} className="grid grid-cols-[92px_1fr] gap-4 rounded-[8px] border hairline p-3">
-                  <img
-                    src={item.product.image}
-                    alt={item.product.name}
-                    className="aspect-square rounded-[8px] object-cover"
-                    style={{ objectPosition: item.product.objectPosition }}
-                  />
-                  <div className="min-w-0">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <h3 className="line-clamp-2 text-sm font-black leading-6 text-ink">{item.product.name}</h3>
-                        <p className="mt-1 text-sm font-bold text-leaf-600">{formatPrice(item.product.price)}</p>
-                      </div>
-                      <button
-                        type="button"
-                        aria-label={`${item.product.name} ürününü sepetten kaldır`}
-                        onClick={() => removeItem(item.product.id)}
-                        className="grid size-9 shrink-0 place-items-center rounded-full bg-bone text-neutral-500 transition hover:bg-red-50 hover:text-red-600"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
-                    <div className="mt-4 flex items-center justify-between gap-3">
-                      <div className="inline-flex items-center rounded-[8px] border hairline">
+              {items.map((item) => {
+                const matchingCampaigns = getMatchingCampaigns(item.product);
+
+                return (
+                  <article key={item.product.id} className="grid grid-cols-[92px_1fr] gap-4 rounded-[8px] border hairline p-3">
+                    <img
+                      src={item.product.image}
+                      alt={item.product.name}
+                      className="aspect-square rounded-[8px] object-cover"
+                      style={{ objectPosition: item.product.objectPosition }}
+                    />
+                    <div className="min-w-0">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <h3 className="line-clamp-2 text-sm font-black leading-6 text-ink">{item.product.name}</h3>
+                          <p className="mt-1 text-sm font-bold text-leaf-600">{formatPrice(item.product.price)}</p>
+                          {matchingCampaigns.length > 0 ? (
+                            <div className="mt-2 flex flex-wrap gap-1">
+                              {matchingCampaigns.map((campaign) => (
+                                <span
+                                  key={campaign.slug}
+                                  className="inline-flex rounded-[8px] bg-amber px-2 py-1 text-[11px] font-black text-ink"
+                                >
+                                  {campaign.discountLabel}
+                                </span>
+                              ))}
+                            </div>
+                          ) : null}
+                        </div>
                         <button
                           type="button"
-                          aria-label="Adedi azalt"
-                          onClick={() => decreaseItem(item.product.id)}
-                          className="grid size-9 place-items-center text-ink hover:bg-bone"
+                          aria-label={`${item.product.name} ürününü sepetten kaldır`}
+                          onClick={() => removeItem(item.product.id)}
+                          className="grid size-9 shrink-0 place-items-center rounded-full bg-bone text-neutral-500 transition hover:bg-red-50 hover:text-red-600"
                         >
-                          <Minus size={16} />
-                        </button>
-                        <span className="grid min-w-9 place-items-center text-sm font-black text-ink">{item.quantity}</span>
-                        <button
-                          type="button"
-                          aria-label="Adedi artır"
-                          onClick={() => addItem(item.product)}
-                          className="grid size-9 place-items-center text-ink hover:bg-bone"
-                        >
-                          <Plus size={16} />
+                          <Trash2 size={16} />
                         </button>
                       </div>
-                      <p className="text-sm font-black text-ink">{formatPrice(item.product.price * item.quantity)}</p>
+                      <div className="mt-4 flex items-center justify-between gap-3">
+                        <div className="inline-flex items-center rounded-[8px] border hairline">
+                          <button
+                            type="button"
+                            aria-label="Adedi azalt"
+                            onClick={() => decreaseItem(item.product.id)}
+                            className="grid size-9 place-items-center text-ink hover:bg-bone"
+                          >
+                            <Minus size={16} />
+                          </button>
+                          <span className="grid min-w-9 place-items-center text-sm font-black text-ink">
+                            {item.quantity}
+                          </span>
+                          <button
+                            type="button"
+                            aria-label="Adedi artır"
+                            onClick={() => addItem(item.product)}
+                            className="grid size-9 place-items-center text-ink hover:bg-bone"
+                          >
+                            <Plus size={16} />
+                          </button>
+                        </div>
+                        <p className="text-sm font-black text-ink">{formatPrice(item.product.price * item.quantity)}</p>
+                      </div>
                     </div>
-                  </div>
-                </article>
-              ))}
+                  </article>
+                );
+              })}
             </div>
           )}
         </div>
 
         <div className="border-t hairline bg-white p-5">
-          <div className="flex items-center justify-between gap-4">
-            <span className="text-sm font-black uppercase tracking-[0.14em] text-neutral-500">Toplam</span>
-            <span className="text-2xl font-black text-ink">{formatPrice(totalPrice)}</span>
+          {appliedDiscounts.length > 0 ? (
+            <div className="mb-4 rounded-[8px] border border-leaf-500/20 bg-leaf-50 p-4">
+              <p className="inline-flex items-center gap-2 text-sm font-black text-leaf-700">
+                <BadgePercent size={18} />
+                Kampanya indirimi uygulandı
+              </p>
+              <div className="mt-3 grid gap-2">
+                {appliedDiscounts.map((discount) => (
+                  <div key={discount.slug} className="flex items-center justify-between gap-3 text-sm">
+                    <span className="font-bold text-neutral-700">{discount.label}</span>
+                    <span className="font-black text-leaf-700">-{formatPrice(discount.amount)}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          <div className="grid gap-2">
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-sm font-bold text-neutral-500">Ara Toplam</span>
+              <span
+                className={
+                  discountTotal > 0 ? "text-sm font-bold text-neutral-400 line-through" : "text-sm font-black text-ink"
+                }
+              >
+                {formatPrice(subtotalPrice)}
+              </span>
+            </div>
+            {discountTotal > 0 ? (
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-sm font-black text-leaf-700">Sepet İndirimi</span>
+                <span className="text-sm font-black text-leaf-700">-{formatPrice(discountTotal)}</span>
+              </div>
+            ) : null}
+            <div className="flex items-center justify-between gap-4 border-t hairline pt-3">
+              <span className="text-sm font-black uppercase tracking-[0.14em] text-neutral-500">Ödenecek Toplam</span>
+              <span className="text-2xl font-black text-ink">{formatPrice(totalPrice)}</span>
+            </div>
           </div>
+
           <div className="mt-4 grid gap-3">
             <a
               href={`https://wa.me/${storeInfo.whatsapp}?text=${encodeURIComponent(whatsappText)}`}
@@ -238,4 +327,68 @@ function CartDrawer() {
       </aside>
     </>
   );
+}
+
+function getMatchingCampaigns(product: Product) {
+  return campaigns.filter((campaign) => {
+    const productMatch = campaign.productIds?.includes(product.id) ?? false;
+    const categoryMatch = campaign.categorySlugs.includes(product.category);
+    return productMatch || categoryMatch;
+  });
+}
+
+function calculateCampaignDiscounts(items: CartItem[]): AppliedDiscount[] {
+  return campaigns
+    .map((campaign) => {
+      const eligibleItems = items.filter((item) => {
+        const productMatch = campaign.productIds?.includes(item.product.id) ?? false;
+        const categoryMatch = campaign.categorySlugs.includes(item.product.category);
+        return productMatch || categoryMatch;
+      });
+
+      if (eligibleItems.length === 0) {
+        return null;
+      }
+
+      if (campaign.discount.type === "percentage") {
+        const eligibleTotal = eligibleItems.reduce((total, item) => total + item.product.price * item.quantity, 0);
+        const amount = Math.round((eligibleTotal * campaign.discount.value) / 100);
+
+        if (amount <= 0) {
+          return null;
+        }
+
+        return {
+          slug: campaign.slug,
+          title: campaign.title,
+          label: campaign.discountLabel,
+          amount
+        };
+      }
+
+      const unitPrices = eligibleItems.flatMap((item) => Array.from({ length: item.quantity }, () => item.product.price));
+      const freeItemCount =
+        Math.floor(unitPrices.length / campaign.discount.buy) * (campaign.discount.buy - campaign.discount.pay);
+
+      if (freeItemCount <= 0) {
+        return null;
+      }
+
+      const amount = unitPrices
+        .sort((a, b) => a - b)
+        .slice(0, freeItemCount)
+        .reduce((total, price) => total + price, 0);
+
+      if (amount <= 0) {
+        return null;
+      }
+
+      return {
+        slug: campaign.slug,
+        title: campaign.title,
+        label: campaign.discountLabel,
+        amount
+      };
+    })
+    .filter((discount): discount is AppliedDiscount => Boolean(discount));
 }

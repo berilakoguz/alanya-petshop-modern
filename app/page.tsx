@@ -159,7 +159,9 @@ export default function HomePage() {
                     <p className="mt-5 min-h-24 text-base leading-8 text-neutral-700">{item.text}</p>
                     <div className="mt-6 border-t hairline pt-5">
                       <p className="font-black text-ink">{item.name}</p>
-                      <p className="mt-1 text-sm font-semibold text-neutral-500">{item.pet}</p>
+                      <p className="mt-1 text-sm font-semibold text-neutral-500">
+                        {(item as { pet?: string }).pet ?? "Pozitif Petshop müşterisi"}
+                      </p>
                     </div>
                   </article>
                 </Reveal>

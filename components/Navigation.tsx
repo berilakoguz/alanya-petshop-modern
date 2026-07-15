@@ -24,19 +24,13 @@ export function Navigation() {
         </div>
       </div>
 
-      <nav className="container-shell flex h-20 items-center justify-between gap-5">
-        <Link href="/" className="flex min-w-0 items-center gap-3" aria-label="Ana sayfa">
-          <span className="grid size-11 shrink-0 place-items-center rounded-[8px] bg-leaf-500 text-lg font-black text-white">
-            P+
-          </span>
-          <span className="min-w-0">
-            <span className="block truncate text-base font-black leading-tight text-ink md:text-xl">
-              {storeInfo.shortName}
-            </span>
-            <span className="hidden text-xs font-bold uppercase tracking-[0.18em] text-neutral-500 sm:block">
-              Alanya
-            </span>
-          </span>
+      <nav className="container-shell flex h-24 items-center justify-between gap-5">
+        <Link href="/" className="flex min-w-0 items-center" aria-label="Ana sayfa">
+          <img
+            src="/images/alanya-petshop-1.png"
+            alt={storeInfo.name}
+            className="h-14 w-auto max-w-[230px] object-contain sm:h-16 sm:max-w-[330px]"
+          />
         </Link>
 
         <div className="hidden items-center gap-1 lg:flex">

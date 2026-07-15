@@ -7,17 +7,17 @@ export function Footer() {
     <footer className="bg-ink text-white">
       <div className="container-shell grid gap-10 py-14 md:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
         <div>
-          <Link href="/" className="flex items-center gap-3">
-            <span className="grid size-12 place-items-center rounded-[8px] bg-leaf-500 text-lg font-black">P+</span>
-            <span>
-              <span className="block text-xl font-black">{storeInfo.shortName}</span>
-              <span className="text-sm font-bold text-white/56">Alanya</span>
-            </span>
+          <Link href="/" className="inline-flex rounded-[8px] bg-white p-3 shadow-soft">
+            <img
+              src="/images/alanya-petshop-1.png"
+              alt={storeInfo.name}
+              className="h-16 w-auto max-w-[340px] object-contain"
+            />
           </Link>
           <p className="mt-5 max-w-sm text-sm leading-7 text-white/68">{storeInfo.tagline}</p>
           <div className="mt-6 flex gap-2">
             <a
-              href="https://instagram.com"
+              href="https://www.instagram.com/pozitifpetmarket?igsh=MzZsb3loaHJ0b3h0"
               target="_blank"
               rel="noreferrer"
               aria-label="Instagram"
@@ -26,7 +26,7 @@ export function Footer() {
               <Instagram size={19} />
             </a>
             <a
-              href="https://facebook.com"
+              href="https://www.facebook.com/share/1Yon8C6JDC/"
               target="_blank"
               rel="noreferrer"
               aria-label="Facebook"
