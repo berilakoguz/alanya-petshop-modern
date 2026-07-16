@@ -14,7 +14,7 @@ export default function ProductsPage() {
       <PageHero
         eyebrow="Ürün Kataloğu"
         title="Kedi, köpek, kuş ve akvaryum için seçili ürünler."
-        description="Premium mama, ödül, oyuncak, bakım ve akvaryum ürünlerini kategoriye göre hızlıca filtreleyin."
+        description="Marka, fiyat, yaş, ırk, protein, tahıl durumu, paket kilosu ve sıralama seçenekleriyle hızlı seçim yapın."
         image="/images/product-assortment.png"
       />
       <section className="py-16">

@@ -5,12 +5,20 @@ import { Heart, ShoppingBag, Star } from "lucide-react";
 import { motion } from "framer-motion";
 import { useCart } from "@/components/CartProvider";
 import type { Product } from "@/data/site";
+import { breedSizeLabels, getProductProfile, grainPreferenceLabels, lifeStageLabels } from "@/lib/product-intelligence";
 import { cn, formatPrice } from "@/lib/utils";
 
 export function ProductCard({ product, compact = false }: { product: Product; compact?: boolean }) {
   const [liked, setLiked] = useState(false);
   const [added, setAdded] = useState(false);
   const { addItem } = useCart();
+  const profile = getProductProfile(product);
+  const detailBadges = [
+    profile.lifeStage !== "belirsiz" ? lifeStageLabels[profile.lifeStage] : null,
+    product.category === "kopek" && profile.breedSize !== "belirsiz" ? breedSizeLabels[profile.breedSize] : null,
+    profile.grainPreference !== "belirsiz" ? grainPreferenceLabels[profile.grainPreference] : null,
+    profile.proteinPercent ? `%${profile.proteinPercent} protein` : null
+  ].filter((badge): badge is string => Boolean(badge));
 
   function handleAddToCart() {
     addItem(product);
@@ -61,6 +69,15 @@ export function ProductCard({ product, compact = false }: { product: Product; co
           <h3 className="min-h-14 text-lg font-black leading-7 text-ink">{product.name}</h3>
           <p className="mt-2 min-h-14 text-sm leading-7 text-neutral-600">{product.description}</p>
         </div>
+        {!compact && detailBadges.length ? (
+          <div className="flex min-h-8 flex-wrap gap-2">
+            {detailBadges.slice(0, 4).map((badge) => (
+              <span key={badge} className="rounded-[8px] bg-leaf-50 px-2 py-1 text-[11px] font-black text-leaf-700">
+                {badge}
+              </span>
+            ))}
+          </div>
+        ) : null}
         <div className="flex items-end justify-between gap-3">
           <div>
             {product.oldPrice ? (

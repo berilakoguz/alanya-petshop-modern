@@ -9,6 +9,13 @@ npm install
 npm run dev
 ```
 
+Gerçek yapay zeka sohbeti için `.env.local` dosyası oluşturup OpenAI API anahtarını ekleyin:
+
+```bash
+OPENAI_API_KEY=sk-proj-your-api-key
+OPENAI_MODEL=gpt-5.6
+```
+
 Tarayıcıda aç:
 
 ```bash

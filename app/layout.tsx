@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { AiSupportChat } from "@/components/AiSupportChat";
 import { CartProvider } from "@/components/CartProvider";
 import { Footer } from "@/components/Footer";
 import { Navigation } from "@/components/Navigation";
@@ -44,6 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Navigation />
           {children}
           <Footer />
+          <AiSupportChat />
           <WhatsAppBubble />
         </CartProvider>
       </body>
