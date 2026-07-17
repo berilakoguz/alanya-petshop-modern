@@ -1,4 +1,4 @@
-import { PetProfile } from "./analyzer";
+﻿import type { PetProfile } from "./types";
 
 const memory = new Map<string, PetProfile>();
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
-import { Bot, Loader2, MessageCircle, Send, Sparkles, X } from "lucide-react";
+import { Bot, Loader2, MessageCircle, RotateCcw, Send, Sparkles, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type ChatMessage = {
@@ -14,8 +14,109 @@ const welcomeMessage: ChatMessage = {
   id: "welcome",
   role: "assistant",
   content:
-    "Merhaba, ben Pozitif Petshop yapay zeka destek asistanı. Evcil dostunuzun türünü, yaşını, kilosunu ve ihtiyacını yazın; katalogdaki ürünlere göre yardımcı olayım."
+    "\u{1F44B} Merhaba! Ben Pozitif Petshop Asistanı.\n\nMinik dostunuzun türünü, yaşını, kilosunu ve ihtiyacını yazın; katalogdaki ürünlerden size uygun seçenekleri birlikte bulalım. \u{1F43E}"
 };
+
+const quickPrompts = [
+  {
+    label: "\u{1F43E} Mama öner",
+    text: "2 yaşında 5 kg kısır kedim için tahılsız mama öner"
+  },
+  {
+    label: "\u{1F4B0} Ucuz sırala",
+    text: "En uygun fiyatlı köpek mamalarını artan fiyata göre sırala"
+  },
+  {
+    label: "\u{1F9FC} Tüy sorunu",
+    text: "Kedim çok tüy döküyor, ne yapmalıyım?"
+  },
+  {
+    label: "\u{1F3EA} Mağaza bilgisi",
+    text: "Adres, çalışma saatleri ve teslimat bilgisi nedir?"
+  }
+];
+
+const headingPrefixes = [
+  "\u{1F44B}",
+  "\u{1F43E}",
+  "\u{1F4AC}",
+  "\u{1F504}",
+  "\u{1F50E}",
+  "\u{1F4CC}",
+  "\u{1F6D2}",
+  "\u{1F4A1}",
+  "\u{2696}\u{FE0F}",
+  "\u{1FA7A}",
+  "\u{26A0}\u{FE0F}",
+  "\u{1F9FC}",
+  "\u{1F4A7}",
+  "\u{1F37D}\u{FE0F}",
+  "\u{1F6E1}\u{FE0F}",
+  "\u{1F3EA}",
+  "\u{1F4E6}",
+  "\u{1F963}",
+  "\u{1F969}",
+  "\u{1F552}",
+  "\u{1F9B7}",
+  "\u{1F697}",
+  "\u{1F3BE}",
+  "\u{1F914}",
+  "\u{1F64F}"
+];
+
+function MessageContent({ content }: { content: string }) {
+  return (
+    <div className="grid gap-1.5">
+      {content.split("\n").map((line, index) => {
+        const trimmed = line.trim();
+        const key = `${index}-${line}`;
+
+        if (!trimmed) return <span key={key} className="h-1" aria-hidden="true" />;
+
+        if (headingPrefixes.some((prefix) => trimmed.startsWith(prefix))) {
+          return (
+            <p key={key} className={cn("font-black leading-6 text-ink", index > 0 && "mt-1")}>
+              {trimmed}
+            </p>
+          );
+        }
+
+        if (trimmed.startsWith("- ")) {
+          return (
+            <div key={key} className="grid grid-cols-[12px_1fr] gap-1.5 leading-6">
+              <span className="font-black text-leaf-600" aria-hidden="true">
+                •
+              </span>
+              <span>{trimmed.slice(2)}</span>
+            </div>
+          );
+        }
+
+        if (/^\d+\./.test(trimmed)) {
+          return (
+            <p key={key} className="mt-1 font-extrabold leading-6 text-neutral-900">
+              {trimmed}
+            </p>
+          );
+        }
+
+        if (line.startsWith("   ")) {
+          return (
+            <p key={key} className="pl-2 text-[13px] font-medium leading-5 text-neutral-600">
+              {trimmed}
+            </p>
+          );
+        }
+
+        return (
+          <p key={key} className="leading-6">
+            {trimmed}
+          </p>
+        );
+      })}
+    </div>
+  );
+}
 
 export function AiSupportChat() {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,10 +131,8 @@ export function AiSupportChat() {
     }
   }, [isOpen, messages]);
 
-  async function handleSubmit(event?: FormEvent<HTMLFormElement>) {
-    event?.preventDefault();
-
-    const content = draft.trim();
+  async function sendMessage(rawContent: string) {
+    const content = rawContent.trim();
     if (!content || isSending) return;
 
     const userMessage: ChatMessage = {
@@ -65,7 +164,7 @@ export function AiSupportChat() {
           content:
             payload.message ??
             payload.error ??
-            "Şu an yapay zeka desteğine ulaşılamıyor. Biraz sonra tekrar deneyebilirsiniz."
+            "\u{26A0}\u{FE0F} Şu an asistana ulaşılamıyor. Biraz sonra tekrar deneyebilirsiniz."
         }
       ]);
     } catch {
@@ -74,7 +173,7 @@ export function AiSupportChat() {
         {
           id: crypto.randomUUID(),
           role: "assistant",
-          content: "Bağlantı kurulamadı. İnternet veya sunucu ayarlarını kontrol edip tekrar deneyin."
+          content: "\u{26A0}\u{FE0F} Bağlantı kurulamadı. Lütfen biraz sonra tekrar deneyin."
         }
       ]);
     } finally {
@@ -82,11 +181,22 @@ export function AiSupportChat() {
     }
   }
 
+  function handleSubmit(event?: FormEvent<HTMLFormElement>) {
+    event?.preventDefault();
+    void sendMessage(draft);
+  }
+
   function handleKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
-      void handleSubmit();
+      void sendMessage(draft);
     }
+  }
+
+  function resetConversation() {
+    if (isSending) return;
+    setMessages([{ ...welcomeMessage, id: crypto.randomUUID() }]);
+    setDraft("");
   }
 
   return (
@@ -115,18 +225,31 @@ export function AiSupportChat() {
               <Bot size={21} aria-hidden="true" />
             </span>
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.16em] text-white/62">Gerçek AI model desteği</p>
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-white/62">Akıllı katalog ve bakım desteği</p>
               <h2 className="mt-1 text-lg font-black leading-tight">Pozitif Petshop Asistanı</h2>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={() => setIsOpen(false)}
-            aria-label="Yapay zeka sohbetini kapat"
-            className="grid size-10 shrink-0 place-items-center rounded-full bg-white/10 transition hover:bg-white/18"
-          >
-            <X size={20} />
-          </button>
+          <div className="flex shrink-0 items-center gap-1">
+            <button
+              type="button"
+              onClick={resetConversation}
+              disabled={isSending}
+              aria-label="Yeni sohbet başlat"
+              title="Yeni sohbet"
+              className="grid size-10 place-items-center rounded-full bg-white/10 transition hover:bg-white/18 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <RotateCcw size={18} />
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsOpen(false)}
+              aria-label="Yapay zeka sohbetini kapat"
+              title="Sohbeti kapat"
+              className="grid size-10 place-items-center rounded-full bg-white/10 transition hover:bg-white/18"
+            >
+              <X size={20} />
+            </button>
+          </div>
         </div>
 
         <div className="grid max-h-[72svh] min-h-[420px] grid-rows-[1fr_auto]">
@@ -139,11 +262,13 @@ export function AiSupportChat() {
                 >
                   <div
                     className={cn(
-                      "max-w-[86%] rounded-[8px] px-4 py-3 text-sm font-semibold leading-7",
-                      message.role === "user" ? "bg-leaf-600 text-white" : "border hairline bg-white text-neutral-700"
+                      "max-w-[92%] break-words rounded-[8px] px-4 py-3 text-sm leading-6 sm:max-w-[88%]",
+                      message.role === "user"
+                        ? "bg-leaf-600 font-semibold text-white"
+                        : "border hairline bg-white font-medium text-neutral-700"
                     )}
                   >
-                    {message.content}
+                    {message.role === "assistant" ? <MessageContent content={message.content} /> : message.content}
                   </div>
                 </div>
               ))}
@@ -160,6 +285,21 @@ export function AiSupportChat() {
           </div>
 
           <form onSubmit={handleSubmit} className="border-t hairline bg-white p-3">
+            {messages.length === 1 ? (
+              <div className="mb-3 flex flex-wrap gap-2">
+                {quickPrompts.map((prompt) => (
+                  <button
+                    key={prompt.label}
+                    type="button"
+                    onClick={() => void sendMessage(prompt.text)}
+                    disabled={isSending}
+                    className="rounded-full border hairline bg-bone px-3 py-2 text-xs font-black text-neutral-700 transition hover:border-leaf-500 hover:bg-leaf-50 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {prompt.label}
+                  </button>
+                ))}
+              </div>
+            ) : null}
             <div className="flex items-end gap-2">
               <label className="sr-only" htmlFor="ai-support-message">
                 Yapay zeka desteğine mesaj yaz

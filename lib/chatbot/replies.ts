@@ -1,3 +1,6 @@
-const ai = new AIEngine(userId);
+﻿import { AIEngine } from "./AIEngine";
 
-return ai.reply(message);
+export function createLocalReply(message: string, userId = "guest") {
+  const ai = new AIEngine(userId);
+  return ai.reply(message);
+}
