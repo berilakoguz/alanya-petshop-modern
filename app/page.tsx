@@ -31,7 +31,7 @@ export default function HomePage() {
               </ButtonLink>
             </Reveal>
 
-            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-10 grid grid-cols-2 gap-5 lg:grid-cols-3">
               {categories.map((category, index) => (
                 <Reveal key={category.slug} delay={index * 0.04}>
                   <CategoryCard category={category} />
@@ -87,7 +87,7 @@ export default function HomePage() {
                 Mağazayı Aç
               </ButtonLink>
             </Reveal>
-            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-10 grid grid-cols-2 gap-5 lg:grid-cols-4">
               {products.slice(0, 4).map((product, index) => (
                 <Reveal key={product.id} delay={index * 0.04}>
                   <ProductCard product={product} compact />

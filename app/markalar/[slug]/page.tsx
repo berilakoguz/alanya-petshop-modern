@@ -27,7 +27,7 @@ export default async function BrandPage({ params }: Props) {
         {brandName}
       </h1>
 
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
         {brandProducts.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
