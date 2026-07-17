@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { brandLogoDomains } from "@/data/brand-logos";
+import { cn } from "@/lib/utils";
 
 type BrandLogoProps = {
   brand: string;
+  className?: string;
 };
 
 function getBrandInitials(brand: string) {
@@ -21,13 +23,13 @@ function getBrandInitials(brand: string) {
     .toLocaleUpperCase("tr-TR");
 }
 
-export function BrandLogo({ brand }: BrandLogoProps) {
+export function BrandLogo({ brand, className }: BrandLogoProps) {
   const [hasError, setHasError] = useState(false);
   const domain = brandLogoDomains[brand];
   const initials = getBrandInitials(brand);
 
   return (
-    <span className="flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-[8px] border border-neutral-200 bg-white p-2 shadow-sm">
+    <span className={cn("flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-[8px] border border-neutral-200 bg-white p-2 shadow-sm", className)}>
       {domain && !hasError ? (
         <img
           src={`https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`}
@@ -49,4 +51,3 @@ export function BrandLogo({ brand }: BrandLogoProps) {
     </span>
   );
 }
-

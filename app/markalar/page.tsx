@@ -36,15 +36,15 @@ export default function BrandsPage() {
               <Reveal key={brand} delay={index * 0.03}>
                 <Link
                   href={`/markalar/${brand.toLowerCase().replace(/\s+/g, "-")}`}
-                  className="flex h-full min-h-48 flex-col rounded-[8px] border hairline bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                  className="flex h-full min-h-0 flex-col rounded-[8px] border hairline bg-white p-3 shadow-sm transition hover:-translate-y-1 hover:shadow-lg sm:min-h-48 sm:p-5"
                 >
-                  <div className="flex min-h-16 items-center gap-4">
-                    <BrandLogo brand={brand} />
-                    <h2 className="min-w-0 text-xl font-black leading-tight text-ink">
+                  <div className="flex min-h-0 flex-col items-start gap-2 sm:min-h-16 sm:flex-row sm:items-center sm:gap-4">
+                    <BrandLogo brand={brand} className="size-11 p-1.5 sm:size-16 sm:p-2" />
+                    <h2 className="w-full break-words text-base font-black leading-tight text-ink sm:min-w-0 sm:text-xl">
                       {brand}
                     </h2>
                   </div>
-                  <p className="mt-5 text-sm leading-7 text-neutral-600">
+                  <p className="mt-3 text-xs leading-5 text-neutral-600 sm:mt-5 sm:text-sm sm:leading-7">
                     Seçili ürünler, kampanya dönemleri ve alternatif öneriler.
                   </p>
                 </Link>

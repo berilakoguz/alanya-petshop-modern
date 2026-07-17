@@ -34,25 +34,25 @@ export function PromoCard({ title, description, eyebrow, tone, slug, discountLab
     <Link
       href={`/kampanyalar/${slug}`}
       className={cn(
-        "group grid min-h-64 content-between rounded-[8px] p-6 shadow-soft transition hover:-translate-y-1 hover:shadow-lift",
+        "group grid min-h-48 content-between rounded-[8px] p-4 shadow-soft transition hover:-translate-y-1 hover:shadow-lift md:min-h-64 md:p-6",
         toneStyle.className
       )}
     >
       <div className="flex items-center justify-between gap-4">
-        <span className="text-xs font-black uppercase tracking-[0.18em] text-white/80">{eyebrow}</span>
-        <span className="grid size-11 place-items-center rounded-full bg-white/16">
-          <Icon size={22} aria-hidden="true" />
+        <span className="text-[10px] font-black uppercase tracking-[0.12em] text-white/80 md:text-xs md:tracking-[0.18em]">{eyebrow}</span>
+        <span className="grid size-9 place-items-center rounded-full bg-white/16 md:size-11">
+          <Icon size={18} className="md:size-[22px]" aria-hidden="true" />
         </span>
       </div>
       <div>
-        <span className="mb-4 inline-flex rounded-[8px] bg-white/16 px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-white">
+        <span className="mb-3 inline-flex rounded-[8px] bg-white/16 px-2 py-1 text-[10px] font-black uppercase tracking-[0.08em] text-white md:mb-4 md:px-3 md:text-xs md:tracking-[0.12em]">
           {discountLabel}
         </span>
-        <h3 className="text-2xl font-black leading-tight">{title}</h3>
-        <p className="mt-4 text-sm leading-7 text-white/82">{description}</p>
-        <span className="mt-6 inline-flex items-center gap-2 text-sm font-black text-white">
+        <h3 className="text-lg font-black leading-tight md:text-2xl">{title}</h3>
+        <p className="mt-2 text-xs leading-5 text-white/82 md:mt-4 md:text-sm md:leading-7">{description}</p>
+        <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-black text-white md:mt-6 md:gap-2 md:text-sm">
           Kampanyayı İncele
-          <ArrowRight size={17} className="transition group-hover:translate-x-1" aria-hidden="true" />
+          <ArrowRight size={15} className="transition group-hover:translate-x-1 md:size-[17px]" aria-hidden="true" />
         </span>
       </div>
     </Link>

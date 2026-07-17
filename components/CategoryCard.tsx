@@ -23,7 +23,7 @@ export function CategoryCard({ category }: { category: Category }) {
 }
       className="group grid overflow-hidden rounded-[8px] border hairline bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lift"
     >
-      <div className="image-sheen aspect-[5/3]">
+      <div className="image-sheen aspect-[4/3] sm:aspect-[5/3]">
         <img
           src={category.image}
           alt={`${category.name} kategorisi`}
@@ -31,20 +31,20 @@ export function CategoryCard({ category }: { category: Category }) {
           style={{ objectPosition: category.objectPosition }}
         />
       </div>
-      <div className="grid gap-4 p-5">
-        <div className="flex items-center justify-between gap-4">
+      <div className="grid gap-3 p-3 sm:gap-4 sm:p-5">
+        <div className="flex items-center justify-between gap-2 sm:gap-4">
           <div
-            className="grid size-11 place-items-center rounded-[8px] text-white"
+            className="grid size-9 place-items-center rounded-[8px] text-white sm:size-11"
             style={{ backgroundColor: category.accent }}
             aria-hidden="true"
           >
-            <Icon size={22} strokeWidth={2.4} />
+            <Icon size={18} className="sm:size-[22px]" strokeWidth={2.4} />
           </div>
-          <span className="text-sm font-bold text-neutral-500">{category.count} ürün</span>
+          <span className="text-xs font-bold text-neutral-500 sm:text-sm">{category.count} ürün</span>
         </div>
         <div>
-          <h3 className="text-xl font-black text-ink">{category.name}</h3>
-          <p className="mt-2 min-h-14 text-sm leading-7 text-neutral-600">{category.description}</p>
+          <h3 className="text-base font-black text-ink sm:text-xl">{category.name}</h3>
+          <p className="mt-2 min-h-0 text-xs leading-5 text-neutral-600 sm:min-h-14 sm:text-sm sm:leading-7">{category.description}</p>
         </div>
       </div>
     </Link>

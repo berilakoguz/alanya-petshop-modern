@@ -4,7 +4,7 @@ import { stats, storeInfo } from "@/data/site";
 
 export function Hero() {
   return (
-    <section className="relative isolate min-h-[82svh] overflow-visible bg-ink text-white">
+    <section className="relative isolate min-h-[82svh] overflow-hidden bg-ink text-white md:overflow-visible">
       <img
         src="/images/hero-store.png"
         alt="Pozitif Petshop Alanya mağaza atmosferi"
@@ -13,7 +13,7 @@ export function Hero() {
       <div className="absolute inset-0 -z-10 bg-gradient-to-r from-ink via-ink/72 to-ink/10" />
       <div className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-ink/72 to-transparent" />
 
-      <div className="container-shell grid min-h-[82svh] items-center py-16">
+      <div className="container-shell grid min-h-[68svh] items-center py-12 md:min-h-[82svh] md:py-16">
         <div className="max-w-2xl">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/12 px-4 py-2 text-sm font-bold text-white backdrop-blur">
             <BadgeCheck size={18} className="text-amber" aria-hidden="true" />
@@ -46,7 +46,7 @@ export function Hero() {
         </div>
       </div>
 
-      <div className="container-shell relative z-10 grid translate-y-1/2 gap-3 md:grid-cols-3">
+      <div className="container-shell relative z-10 mt-6 grid gap-3 pb-6 md:mt-0 md:translate-y-1/2 md:pb-0 md:grid-cols-3">
         {[
           { icon: Truck, title: "Aynı gün servis", text: storeInfo.freeDelivery },
           { icon: ShieldCheck, title: "Uzman seçim", text: "Yaş, ırk ve hassasiyete göre ürün tavsiyesi" },

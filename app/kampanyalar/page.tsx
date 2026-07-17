@@ -28,7 +28,7 @@ export default function CampaignsPage() {
               description="Kampanya koşulları stok ve döneme göre değişebilir. En hızlı bilgi için WhatsApp hattından ulaşabilirsiniz."
             />
           </Reveal>
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
+          <div className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5">
             {campaigns.map((campaign, index) => (
               <Reveal key={campaign.title} delay={index * 0.05}>
                 <PromoCard {...campaign} />

@@ -14,7 +14,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <main className="pt-28">
+      <main className="pt-0 md:pt-28">
         <section
         id="kategoriler"
         className="scroll-mt-16 py-16"
@@ -66,7 +66,7 @@ export default function HomePage() {
               </div>
             </Reveal>
           </div>
-          <div className="container-shell mt-10 grid gap-5 md:grid-cols-3">
+          <div className="container-shell mt-10 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5">
             {campaigns.map((campaign, index) => (
               <Reveal key={campaign.title} delay={index * 0.05}>
                 <PromoCard {...campaign} />

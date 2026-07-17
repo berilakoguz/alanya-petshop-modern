@@ -204,13 +204,14 @@ export function AiSupportChat() {
       <button
         type="button"
         onClick={() => setIsOpen(true)}
+        aria-label="Yapay zeka desteği al"
         className={cn(
-          "fixed bottom-24 right-4 z-[60] inline-flex min-h-14 max-w-[calc(100vw-32px)] items-center gap-3 rounded-full bg-ink px-5 text-sm font-black text-white shadow-lift transition hover:-translate-y-1 hover:bg-leaf-600 focus:outline-none focus:ring-4 focus:ring-leaf-100 sm:right-5",
+          "fixed bottom-20 right-4 z-[60] grid size-14 place-items-center rounded-full bg-ink p-0 text-white shadow-lift transition hover:-translate-y-1 hover:bg-leaf-600 focus:outline-none focus:ring-4 focus:ring-leaf-100 sm:bottom-24 sm:right-5 sm:inline-flex sm:min-h-14 sm:w-auto sm:max-w-[calc(100vw-40px)] sm:gap-3 sm:px-5",
           isOpen && "pointer-events-none opacity-0"
         )}
       >
-        <Sparkles size={20} className="text-amber" aria-hidden="true" />
-        Yapay zeka desteği al
+        <Sparkles size={22} className="text-amber sm:size-5" aria-hidden="true" />
+        <span className="hidden sm:inline">Yapay zeka desteği al</span>
       </button>
 
       <div
