@@ -42,7 +42,7 @@ export default function HomePage() {
         </section>
 
         <section className="bg-white py-16">
-          <div className="container-shell grid gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
+          <div className="container-shell max-w-3xl">
             <Reveal>
               <SectionHeader
                 eyebrow="Kampanyalar"
@@ -54,15 +54,6 @@ export default function HomePage() {
                 <ButtonLink href={`https://wa.me/${storeInfo.whatsapp}`} variant="light">
                   WhatsApp Sipariş
                 </ButtonLink>
-              </div>
-            </Reveal>
-            <Reveal delay={0.08}>
-              <div className="image-sheen overflow-hidden rounded-[8px] shadow-soft">
-                <img
-                  src="/images/product-assortment.png"
-                  alt="Pet shop ürün vitrini"
-                  className="aspect-[16/10] h-full w-full object-cover"
-                />
               </div>
             </Reveal>
           </div>
