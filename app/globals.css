@@ -6,8 +6,8 @@
   --background: #fbfaf6;
   --foreground: #17211b;
   --muted: #66736b;
-  --font-sans: "Inter";
-  --font-display: "Fraunces";
+  --font-sans: "Inter Variable";
+  --font-display: "Fraunces Variable";
 }
 
 * {
@@ -20,11 +20,19 @@ html {
 
 body {
   margin: 0;
+  min-width: 320px;
+  overflow-x: hidden;
   background:
     radial-gradient(circle at top left, rgba(255, 193, 7, 0.16), transparent 28rem),
     linear-gradient(180deg, #fbfaf6 0%, #ffffff 42%, #f3f7f4 100%);
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+textarea,
+input,
+select {
+  font-size: max(16px, 1em);
 }
 
 img {

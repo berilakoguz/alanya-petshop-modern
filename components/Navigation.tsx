@@ -24,12 +24,12 @@ export function Navigation() {
         </div>
       </div>
 
-      <nav className="container-shell flex h-24 items-center justify-between gap-5">
+      <nav className="container-shell flex h-20 items-center justify-between gap-3 sm:h-24 sm:gap-5">
         <Link href="/" className="flex min-w-0 items-center" aria-label="Ana sayfa">
           <img
             src="/images/alanya-petshop-1.png"
             alt={storeInfo.name}
-            className="h-14 w-auto max-w-[230px] object-contain sm:h-16 sm:max-w-[330px]"
+            className="h-12 w-auto max-w-[150px] object-contain min-[380px]:max-w-[180px] sm:h-16 sm:max-w-[330px]"
           />
         </Link>
 

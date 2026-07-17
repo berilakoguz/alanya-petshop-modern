@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from "next";
+import "@fontsource-variable/fraunces";
+import "@fontsource-variable/inter";
 import "./globals.css";
 import { AiSupportChat } from "@/components/AiSupportChat";
 import { CartProvider } from "@/components/CartProvider";

@@ -205,7 +205,7 @@ export function AiSupportChat() {
         type="button"
         onClick={() => setIsOpen(true)}
         className={cn(
-          "fixed bottom-24 right-5 z-[60] inline-flex min-h-14 max-w-[calc(100vw-40px)] items-center gap-3 rounded-full bg-ink px-5 text-sm font-black text-white shadow-lift transition hover:-translate-y-1 hover:bg-leaf-600 focus:outline-none focus:ring-4 focus:ring-leaf-100",
+          "fixed bottom-24 right-4 z-[60] inline-flex min-h-14 max-w-[calc(100vw-32px)] items-center gap-3 rounded-full bg-ink px-5 text-sm font-black text-white shadow-lift transition hover:-translate-y-1 hover:bg-leaf-600 focus:outline-none focus:ring-4 focus:ring-leaf-100 sm:right-5",
           isOpen && "pointer-events-none opacity-0"
         )}
       >
@@ -215,18 +215,18 @@ export function AiSupportChat() {
 
       <div
         className={cn(
-          "fixed bottom-24 right-5 z-[70] w-[calc(100vw-40px)] max-w-md overflow-hidden rounded-[8px] border hairline bg-white shadow-lift transition duration-300",
+          "fixed inset-x-2 bottom-2 top-2 z-[70] flex flex-col overflow-hidden rounded-[8px] border hairline bg-white shadow-lift transition duration-300 sm:inset-x-auto sm:bottom-24 sm:right-5 sm:top-auto sm:h-[min(720px,calc(100dvh-8rem))] sm:w-[calc(100vw-40px)] sm:max-w-md",
           isOpen ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-4 opacity-0"
         )}
       >
-        <div className="flex items-start justify-between gap-4 border-b hairline bg-ink p-4 text-white">
+        <div className="flex shrink-0 items-start justify-between gap-3 border-b hairline bg-ink p-3 text-white sm:gap-4 sm:p-4">
           <div className="flex items-start gap-3">
             <span className="grid size-10 shrink-0 place-items-center rounded-[8px] bg-white/12 text-amber">
               <Bot size={21} aria-hidden="true" />
             </span>
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.16em] text-white/62">Akıllı katalog ve bakım desteği</p>
-              <h2 className="mt-1 text-lg font-black leading-tight">Pozitif Petshop Asistanı</h2>
+              <p className="text-[10px] font-black uppercase tracking-[0.12em] text-white/62 sm:text-xs sm:tracking-[0.16em]">Akıllı katalog ve bakım desteği</p>
+              <h2 className="mt-1 text-base font-black leading-tight sm:text-lg">Pozitif Petshop Asistanı</h2>
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-1">
@@ -252,7 +252,7 @@ export function AiSupportChat() {
           </div>
         </div>
 
-        <div className="grid max-h-[72svh] min-h-[420px] grid-rows-[1fr_auto]">
+        <div className="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)_auto]">
           <div className="overflow-y-auto bg-bone p-4">
             <div className="grid gap-3">
               {messages.map((message) => (
