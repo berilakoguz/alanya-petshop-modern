@@ -17,7 +17,7 @@ export default function CampaignsPage() {
         eyebrow="Fırsatlar"
         title="Dostunuzun ihtiyaçlarını avantajlı tamamlayın."
         description="Mama, oyuncak, bakım ve akvaryum ürünlerinde dönemsel kampanyaları takip edin."
-        image="/images/product-assortment.png"
+        image="/images/ChatGPT Image 17 Tem 2026 19_18_40.png"
       />
       <section className="py-16">
         <div className="container-shell">
