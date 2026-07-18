@@ -9,6 +9,7 @@ import {
   type GrainPreference,
   type LifeStage
 } from "@/lib/product-intelligence";
+import { buildExpandedFallback, getExpandedSupportReply } from "@/lib/chatbot/expanded-support";
 import { formatPrice } from "@/lib/utils";
 
 type ChatMessage = {
@@ -48,10 +49,25 @@ type ProductCandidate = {
 };
 
 const severeSymptoms = ["kan", "nefes alam", "nobet", "bayil", "zehir", "ates", "idrar yapam", "ciddi yara", "bilinc"];
+const urgentIngestionTerms = [
+  "cikolata",
+  "uzum",
+  "sogan",
+  "sarimsak",
+  "fare zehri",
+  "camasir suyu",
+  "ilac yedi",
+  "ip yuttu",
+  "plastik yedi",
+  "oyuncak yuttu",
+  "lastik yuttu",
+  "kemik yuttu",
+  "cicek yedi"
+];
 const healthSymptoms = [
-  "kusma",
+  "kus",
   "ishal",
-  "kasinti",
+  "kasin",
   "tuy",
   "istah",
   "alerji",
@@ -62,15 +78,33 @@ const healthSymptoms = [
   "idrar",
   "kulak",
   "mantar",
-  "deri",
+  "derisi",
+  "deride",
   "yara",
   "topall",
   "hapsir",
   "oksur",
-  "titreme",
+  "titri",
   "halsiz",
   "kilo kay",
-  "goz akinti"
+  "kilo al",
+  "zayif",
+  "goz",
+  "burun",
+  "nefes",
+  "su icm",
+  "yem yem",
+  "kan",
+  "pati",
+  "disleri",
+  "dis eti",
+  "goz akinti",
+  "gozunu acam",
+  "gozu kiz",
+  "burnu ak",
+  "surekli uyu",
+  "hasta gibi",
+  "karni sis"
 ];
 const flavorTerms = ["kuzu", "tavuk", "somon", "balik", "hindi", "ordek", "geyik", "biftek", "ton", "alabalik", "karides", "balkabagi", "nar", "bildircin", "morina"];
 const breedTerms = ["golden", "labrador", "husky", "maltese", "pomeranian", "chihuahua", "terrier", "kangal", "doberman", "rottweiler", "british", "scottish", "tekir", "iran", "van", "ankara", "alman"];
@@ -152,18 +186,24 @@ export class AIEngine {
     if (this.hasAny(text, ["gorusuruz", "hoscakal", "bye"])) {
       return "\u{1F44B} Görüşmek üzere! Minik dostunuza bol oyunlu, sağlıklı günler.";
     }
-    if (this.hasAny(text, ["nasilsin", "iyi misin", "napıyorsun", "napiyorsun"])) {
+    if (this.hasAny(text, ["nasilsin", "iyi misin", "napÄ±yorsun", "napiyorsun", "burada misin"])) {
       return "\u{1F60A} Gayet iyiyim, teşekkür ederim! Bugün minik dostunuz için neye bakalım: mama, bakım, oyuncak, sağlık bilgisi veya mağaza desteği?";
     }
     if (this.hasAny(text, ["seni seviyorum", "cok tatlisin", "harikasin"])) {
       return "\u{1F49A} Bunu duymak çok güzel! Ben de minik dostunuz için burada olmaktan mutluyum. Bugün ona ne seçiyoruz?";
     }
 
+    const unsupportedAnimal = this.detectUnsupportedAnimal(text);
+    if (unsupportedAnimal) return this.unsupportedAnimalAnswer(unsupportedAnimal);
+
+    const expandedSupportReply = getExpandedSupportReply(current, profile);
+    if (expandedSupportReply) return expandedSupportReply;
+    if (this.isAvailabilityQuestion(text, profile)) return this.availabilityAnswer(text, profile);
+    if (this.isHealthQuestion(text, currentProfile)) return this.healthAnswer({ ...profile, symptoms: currentProfile.symptoms }, text);
     if (this.isStoreQuestion(text)) return this.storeAnswer(text);
     if (this.isNutritionQuestion(text)) return this.nutritionAnswer(text, profile);
     if (currentProfile.compare || this.isCompareQuestion(text)) return this.compareAnswer(profile, text);
     if (this.isCatalogQuestion(text)) return this.catalogAnswer(text);
-    if (this.isHealthQuestion(text, currentProfile)) return this.healthAnswer({ ...profile, symptoms: currentProfile.symptoms }, text);
     if (this.isCareQuestion(text)) return this.careAnswer(text, profile);
     if (this.isProductQuestion(text, currentProfile, profile)) return this.productAnswer(profile, text);
     if (this.hasProfileDetails(currentProfile)) return this.profileAcknowledgement(profile, currentProfile);
@@ -284,9 +324,9 @@ export class AIEngine {
     profile.sort = this.detectSort(text);
     profile.compare = this.isCompareQuestion(text);
     profile.proteinFocus = this.hasAny(text, ["protein", "yuksek protein", "protein orani"]);
-    profile.flavor = flavorTerms.find((term) => text.includes(term));
-    profile.breed = breedTerms.find((term) => text.includes(term));
-    profile.brands = brands.filter((brand) => text.includes(normalizeTerm(brand.trim())));
+    profile.flavor = flavorTerms.find((term) => this.hasPhrase(text, term));
+    profile.breed = breedTerms.find((term) => this.hasPhrase(text, term));
+    profile.brands = brands.filter((brand) => this.brandMentioned(text, brand));
     profile.brand = profile.brands[0];
     profile.symptoms = healthSymptoms.filter((symptom) => text.includes(symptom));
 
@@ -297,6 +337,15 @@ export class AIEngine {
     const candidates = this.rankProducts(profile, text);
 
     if (candidates.length === 0) {
+      if (!profile.animal) {
+        return [
+          "\u{1F50D} Daha isabetli oneride bulunabilmem icin once dostunuzun turunu netlestirelim.",
+          "Kedi, kopek, kus, balik/akvaryum veya kemirgen oldugunu yazarsaniz; tahilli, tahilsiz, premium veya ekonomik secenekleri daha dogru ayirabilirim.",
+          "",
+          "\u{1F4AC} Ornek: 'Kedi icin tahilli mama oner' veya 'Kopegim icin 1500 TL alti mama ara'."
+        ].join("\n");
+      }
+
       const nearest = profile.budget
         ? this.rankProducts({ ...profile, budget: undefined }, text)
             .filter((candidate) => candidate.product.price > profile.budget!)
@@ -351,6 +400,20 @@ export class AIEngine {
     const candidates = this.compareCandidates(profile, text);
 
     if (candidates.length < 2) {
+      if (profile.brands && profile.brands.length >= 2) {
+        return [
+          "\u{2696}\u{FE0F} Marka karsilastirmasi icin dogru zemini kuralim",
+          `${profile.brands.join(" ile ")} karsilastirmasinda tek basina marka adi yetmez; tur, yas donemi, kisir durumu, hassasiyet ve butce sonucu ciddi bicimde etkiler.`,
+          "",
+          "En saglikli karsilastirma icin",
+          "- Hangi dostunuz icin baktiginizi yazin.",
+          "- Yavru, yetiskin veya senior oldugunu ekleyin.",
+          "- Tahilli, dusuk tahilli veya tahilsiz tercihiniz varsa belirtin.",
+          "- Butce araliginizi yazin.",
+          "",
+          "\u{1F4AC} Bunlari yazarsaniz iki markayi fiyat, icerik mantigi ve kullanim amacina gore daha net ayirayim."
+        ].join("\n");
+      }
       return [
         "\u{1F50E} Karşılaştırma için iki uygun seçenek bulamadım.",
         "İki marka veya ürün adı yazın; örneğin “N&D ile Pro Plan kısır kedi mamasını karşılaştır”."
@@ -561,12 +624,30 @@ export class AIEngine {
         "- Yavru, senior ve kronik hastalığı olan dostlarda daha erken yardım alın."
       );
     }
+    if (this.hasAny(text, ["yemiyor", "mama yemiyor", "hic yemiyor", "su icmiyor", "cok su iciyor"])) {
+      lines.push(
+        "",
+        "\u{1F37D}\u{FE0F} Yeme ve su içme düzeni için",
+        "- Tam yememe, su içmeme veya belirgin su artışı tek başına önemli bir işaret olabilir.",
+        "- Kedilerde bir günü bulan yememe özellikle ciddiye alınmalıdır.",
+        "- Ani değişimin süresi, kullandığı mama ve enerji düzeyi not edilmelidir."
+      );
+    }
     if (text.includes("istah") || text.includes("halsiz") || text.includes("kilo kay")) {
       lines.push(
         "",
         "\u{1F37D}\u{FE0F} İştah ve enerji için",
         "- Mama kabı, ağız/diş hassasiyeti, stres ve yakın zamanda yapılan mama değişimini kontrol edin.",
         "- Kedilerde bir günü bulan yememe, yavrularda birkaç öğün üst üste yememe önemlidir; veterineri geciktirmeyin."
+      );
+    }
+    if (this.hasAny(text, urgentIngestionTerms)) {
+      lines.push(
+        "",
+        "\u{26A0}\u{FE0F} Yutma/zehirlenme uyarısı",
+        "- Ne yediğini, miktarı ve saati not alın; ambalajı saklayın.",
+        "- Zorla kusturmaya çalışmayın.",
+        "- Nefes zorlanması, titreme, tekrar eden kusma veya ani durgunluk varsa acil yardım alın."
       );
     }
     if (text.includes("pire") || text.includes("kene")) {
@@ -879,16 +960,11 @@ export class AIEngine {
         "",
         ...this.profileSummaryLines(profile),
         "",
-        "\u{1F4AC} Mama önerisi, fiyat sıralaması, bakım, beslenme veya sağlık belirtisi şeklinde biraz daha açık yazabilir misiniz?"
+        "\u{1F4AC} Mama önerisi, fiyat sıralaması, bakım, beslenme, başlangıç listesi veya mağaza desteği şeklinde biraz daha açık yazabilir misiniz?"
       ].join("\n");
     }
 
-    return [
-      "\u{1F914} Bu mesajı petshop desteği kapsamında doğru yorumlayamadım.",
-      "Mama ve ürün önerisi, fiyat karşılaştırması, temel bakım/beslenme bilgisi veya mağaza detayları hakkında yardımcı olabilirim.",
-      "",
-      "\u{1F4AC} Örnek: “3 yaşında 8 kg köpeğim için 1000 TL altı kuzu etli mama öner.”"
-    ].join("\n");
+    return buildExpandedFallback(profile);
   }
 
   private productCard(candidate: ProductCandidate, index: number, compact = false) {
@@ -931,7 +1007,32 @@ export class AIEngine {
   }
 
   private isStoreQuestion(text: string) {
-    return this.hasAny(text, ["telefon", "whatsapp", "adres", "konum", "saat", "acik", "teslimat", "servis", "kargo", "iletisim", "nerede"]);
+    return this.hasAny(text, [
+      "telefon",
+      "whatsapp",
+      "adres",
+      "internet siteniz",
+      "konum",
+      "saat",
+      "acik",
+      "teslimat",
+      "servis",
+      "kargo",
+      "iletisim",
+      "nerede",
+      "magazada",
+      "gelip al",
+      "hemen al",
+      "magaza",
+      "internette",
+      "sube",
+      "subeleriniz",
+      "baska magazaniz",
+      "gonderiyor",
+      "cumartesi",
+      "pazar",
+      "resmi tatil"
+    ]);
   }
 
   private isCatalogQuestion(text: string) {
@@ -949,16 +1050,85 @@ export class AIEngine {
   }
 
   private isHealthQuestion(text: string, profile: LocalProfile) {
-    return profile.symptoms.length > 0 || this.hasAny(text, ["hasta", "veteriner", "alerji", "belirti", "rahatsiz", "iyi degil", "acil"]);
+    if (
+      this.hasAny(text, [
+        "veteriner misiniz",
+        "veteriner hizmeti",
+        "asi yapiyor",
+        "cip takiyor",
+        "tirnak kesiyor",
+        "pet kuafor",
+        "otel var mi",
+        "pansiyon var mi"
+      ])
+    ) {
+      return false;
+    }
+
+    return (
+      profile.symptoms.length > 0 ||
+      this.hasAny(text, [
+        "hasta",
+        "veteriner",
+        "alerji",
+        "belirti",
+        "rahatsiz",
+        "iyi degil",
+        "yemiyor",
+        "su icmiyor",
+        "cok su iciyor",
+        "mama yemiyor",
+        "kanli",
+        "yuttu",
+        "zehir",
+        "nefes alamiyor",
+        "cikolata",
+        "uzum",
+        "sogan",
+        "sarimsak",
+        "fare zehri",
+        "camasir suyu",
+        "ilac yedi",
+        "ilac kullaniyor",
+        "ameliyat oldu",
+        "midesi bozuldu",
+        "yaslandi",
+        "kilo vermeli",
+        "kilo almali",
+        "gozunu acamiyor",
+        "gozu kizardi",
+        "goz akiyor",
+        "burnu akiyor",
+        "agzi kokuyor",
+        "surekli uyuyor",
+        "yem yemiyor",
+        "hasta gibi",
+        "karni sis",
+        "topalliyor",
+        "nefes alirken ses",
+        "agzini acip nefes aliyor",
+        "avokado"
+      ]) ||
+      this.hasWord(text, "acil")
+    );
   }
 
   private isNutritionQuestion(text: string) {
     const directSafetyQuestion = this.hasAny(text, [
       "sut verebilir",
+      "yogurt verebilir",
+      "peynir verebilir",
+      "ton baligi verebilir",
+      "tavuk verebilir",
+      "ciger verebilir",
+      "yumurta verebilir",
+      "ekmek verebilir",
+      "kemik verebilir",
       "cikolata",
       "sogan",
       "sarimsak",
       "uzum",
+      "avokado",
       "insan yemegi",
       "ev yemegi",
       "ne yiyebilir"
@@ -1144,6 +1314,32 @@ export class AIEngine {
     return labels[animal];
   }
 
+  private detectUnsupportedAnimal(text: string) {
+    const matches: Array<[string, string[]]> = [
+      ["kaplumbağa", ["kaplumbaga"]],
+      ["kirpi", ["kirpi"]],
+      ["iguana", ["iguana"]],
+      ["yılan", ["yilan"]],
+      ["gelincik", ["gelincik", "ferret"]]
+    ];
+
+    return matches.find(([, terms]) => this.hasAny(text, terms))?.[0];
+  }
+
+  private unsupportedAnimalAnswer(animal: string) {
+    return [
+      "\u{1F98E} " + animal + " için genel yönlendirme yapabilirim.",
+      "Mevcut katalog yapısı daha çok kedi, köpek, kuş, akvaryum ve kemirgen tarafına odaklı; bu nedenle egzotik türlerde kesin ürün eşleşmesi yerine güvenli genel bilgi vermek daha doğru olur.",
+      "",
+      "\u{1F4CC} En faydalı ilerleme şekli",
+      "- Türü ve yaş dönemini yazın.",
+      "- Mama, yaşam alanı, ısı, UV, altlık veya genel bakım tarafında neye ihtiyacınız olduğunu belirtin.",
+      "- İştahsızlık, halsizlik, nefes sorunu veya yara gibi belirti varsa bunu baştan ekleyin.",
+      "",
+      "\u{1F4AC} İsterseniz " + animal + " için başlangıç listesi veya temel bakım kontrol listesi çıkarayım."
+    ].join("\n");
+  }
+
   private lifeStageFromAge(age: number, unit: "ay" | "yil", animal?: Animal): LifeStage {
     const months = unit === "ay" ? age : age * 12;
     if (months < 12) return "yavru";
@@ -1209,6 +1405,67 @@ export class AIEngine {
 
   private hasWord(text: string, word: string) {
     return new RegExp(`(^|\\s)${normalizeTerm(word)}($|\\s)`).test(text);
+  }
+
+  private hasPhrase(text: string, phrase: string) {
+    const normalized = normalizeTerm(phrase)
+      .replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+      .replace(/\s+/g, "\\s+");
+    return new RegExp(`(^|\\b)${normalized}(?=$|\\b)`).test(text);
+  }
+
+  private compactText(value: string) {
+    return normalizeTerm(value).replace(/[^a-z0-9]+/g, "");
+  }
+
+  private brandMentioned(text: string, brand: string) {
+    const normalizedBrand = normalizeTerm(brand).replace(/[^a-z0-9\s]+/g, " ").replace(/\s+/g, " ").trim();
+    const compactBrand = this.compactText(brand);
+    const compactMatch = compactBrand.length >= 4 ? this.compactText(text).includes(compactBrand) : false;
+    const firstToken = normalizedBrand.split(" ")[0];
+    const firstTokenMatch = firstToken && firstToken.length >= 4 ? this.hasPhrase(text, firstToken) : false;
+    return this.hasPhrase(text, normalizedBrand) || compactMatch || firstTokenMatch;
+  }
+
+  private isAvailabilityQuestion(text: string, profile: LocalProfile) {
+    const availabilityTerms = [
+      "stok",
+      "var mi",
+      "magazada",
+      "gelip al",
+      "hemen al",
+      "internette",
+      "ne zaman gelir",
+      "ayni gun al",
+      "rezerve",
+      "ayirt"
+    ];
+
+    return Boolean(
+      this.hasAny(text, availabilityTerms) &&
+        (profile.brand || this.hasAny(text, ["magazada var mi", "hemen alabilir miyim", "gelip alabilir miyim", "internette var mi"]))
+    );
+  }
+
+  private availabilityAnswer(text: string, profile: LocalProfile) {
+    const brandLine = profile.brand ? `${profile.brand} icin` : "Bu urun icin";
+    const pickupLine = this.hasAny(text, ["gelip al", "hemen al", "magazada"]) ? "- Magazaya ugrama saatinizi da ekleyin." : "";
+    const lines = [
+      "\u{1F4E6} Stok ve hazirlik destegi",
+      `${brandLine} canli stok kilidini bu ekrandan acamam; en hizli ve guvenli yol WhatsApp veya telefonla anlik teyit gecmektir.`,
+      "",
+      "Hizli teyit icin",
+      "- Urunun tam adini veya markasini yazin.",
+      "- Varsa gramajini ve kac adet istediginizi ekleyin.",
+      pickupLine,
+      "",
+      `WhatsApp: +${storeInfo.whatsapp}`,
+      `Telefon: ${storeInfo.phone}`,
+      "",
+      "\u{1F4AC} Isterseniz gondereceginiz kisa stok teyidi mesajini sizin icin hazirlayayim."
+    ].filter(Boolean);
+
+    return lines.join("\n");
   }
 
   private hasAny(text: string, terms: string[]) {

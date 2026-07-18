@@ -14,7 +14,7 @@ const welcomeMessage: ChatMessage = {
   id: "welcome",
   role: "assistant",
   content:
-    "\u{1F44B} Merhaba! Ben Pozitif Petshop Asistanı.\n\nMinik dostunuzun türünü, yaşını, kilosunu ve ihtiyacını yazın; katalogdaki ürünlerden size uygun seçenekleri birlikte bulalım. \u{1F43E}"
+    "\u{1F44B} Merhaba! Ben Pozitif Petshop Asistanı.\n\nÜrün önerisi, başlangıç alışveriş listesi, bütçe planı, bakım soruları ve mağaza desteğinde yardımcı olabilirim. Minik dostunuzun türünü, yaşını, kilosunu ve ihtiyacını yazın; size uygun bir plan çıkarayım. \u{1F43E}"
 };
 
 const quickPrompts = [
@@ -23,16 +23,16 @@ const quickPrompts = [
     text: "2 yaşında 5 kg kısır kedim için tahılsız mama öner"
   },
   {
-    label: "\u{1F4B0} Ucuz sırala",
-    text: "En uygun fiyatlı köpek mamalarını artan fiyata göre sırala"
+    label: "\u{1F4CB} Başlangıç listesi",
+    text: "Yeni sahiplendiğim yavru kedi için başlangıç listesi çıkar"
   },
   {
-    label: "\u{1F9FC} Tüy sorunu",
-    text: "Kedim çok tüy döküyor, ne yapmalıyım?"
+    label: "\u{1F4B0} Bütçe planı",
+    text: "Köpeğim için mama, ödül ve bakım ürünlerini bütçeme göre planla"
   },
   {
-    label: "\u{1F3EA} Mağaza bilgisi",
-    text: "Adres, çalışma saatleri ve teslimat bilgisi nedir?"
+    label: "\u{1F3EA} Stok ve servis",
+    text: "Mağazaya gelmeden önce stok ve teslimat nasıl teyit edilir?"
   }
 ];
 
@@ -61,7 +61,25 @@ const headingPrefixes = [
   "\u{1F697}",
   "\u{1F3BE}",
   "\u{1F914}",
-  "\u{1F64F}"
+  "\u{1F64F}",
+  "\u{2728}",
+  "\u{1F4F1}",
+  "\u{1F501}",
+  "\u{1F69A}",
+  "\u{1F389}",
+  "\u{1F3F7}\u{FE0F}",
+  "\u{1F431}",
+  "\u{1F436}",
+  "\u{1F393}",
+  "\u{1F6BD}",
+  "\u{1F3E0}",
+  "\u{1F37C}",
+  "\u{1F6A8}",
+  "\u{1F4BB}",
+  "\u{2139}\u{FE0F}",
+  "\u{1F91D}",
+  "\u{1F9FE}",
+  "\u{1F4CF}"
 ];
 
 function MessageContent({ content }: { content: string }) {

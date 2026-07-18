@@ -6,7 +6,8 @@
     "dev": "next dev -p 3000",
     "build": "next build",
     "start": "next start -p 3000",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "chatbot:audit": "npx tsx scripts/chatbot-scenario-audit.ts"
   },
   "dependencies": {
     "@fontsource-variable/fraunces": "^5.2.9",
